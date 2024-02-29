@@ -143,6 +143,13 @@ function isQuestionAnswered(questionNumber) {
   return $(`input[name=question${questionNumber}]:checked`).length > 0;
 }
 
+// 進度條
+function updateProgress() {
+  const progress = ((currentQuestion + 1) / questions) * 100;
+  $('.progress-bar').css('width', `${progress}%`).attr('aria-valuenow', progress);
+  $('#progress-text').text(`${currentQuestion + 1} / ${questions} (${Math.round(progress)}%)`);
+}
+
 $(document).ready(function() {
   initSurvey();
 });
