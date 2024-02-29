@@ -9,9 +9,14 @@
   <link href="style.css" rel="stylesheet">
 </head>
 <body>
-  <h2 class="text-center mb-4">生活品質(QoL)調查</h2>
-  <div id="surveyForm">
-    <!-- 題目產生區 -->
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">生活品質(QoL)調查</h2>
+    <div id="surveyForm">
+      <!-- 題目產生區 -->
+    </div>
+    <button type="button" class="btn btn-primary" id="prevBtn" onclick="changeQuestion(-1)" disabled>上一題</button>
+    <button type="button" class="btn btn-primary float-right" id="nextBtn" onclick="changeQuestion(1)">下一題</button>
+    <button type="button" class="btn btn-success float-right" id="submitBtn" onclick="submitSurvey()" style="display: none;">送出問卷</button>
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

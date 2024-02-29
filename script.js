@@ -100,9 +100,49 @@ function initSurvey() {
       </div>
     `);
   }
+
+  // 新增 change eventlistener 來記錄答案變化
+  for (let i = 1; i <= questions; i++) {
+    $(`input[name=question${i}]`).change(function() {
+      // 把答案放進answers陣列
+      answers[i - 1] = $(this).val();
+      // 選完一題後，顯示下一題
+      setTimeout(() => {
+        changeQuestion(1);
+      }, 200); // 200ms 動畫時間
+    });
+  }
+
+  // 顯示第一題題目
+  $(`#question-1`).addClass('active');
+  updateProgress();
+}
+
+function changeQuestion(direction) {
+  if (direction > 0 && !isQuestionAnswered(currentQuestion + 1)) {
+    // 如果還沒答完問題就按下下一題，則警告
+    alert('請先完成目前題目');
+    return;
+  }
+
+  if (currentQuestion + direction >= 0 && currentQuestion + direction < questions) {
+    $(`#question-${currentQuestion + 1}`).removeClass('active');
+    currentQuestion += direction;
+    $(`#question-${currentQuestion + 1}`).addClass('active');
+    updateProgress();
+  }
+
+// 如果問題都答完了，再長出「送出」按鈕
+$('#prevBtn').prop('disabled', currentQuestion === 0);
+$('#nextBtn').toggle(currentQuestion !== questions - 1);
+$('#submitBtn').toggle(currentQuestion === questions - 1);
+}
+
+// 進到下一題前確認當前題目是否已回答
+function isQuestionAnswered(questionNumber) {
+  return $(`input[name=question${questionNumber}]:checked`).length > 0;
 }
 
 $(document).ready(function() {
   initSurvey();
 });
-
