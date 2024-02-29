@@ -150,6 +150,89 @@ function updateProgress() {
   $('#progress-text').text(`${currentQuestion + 1} / ${questions} (${Math.round(progress)}%)`);
 }
 
+// 送出答案
+function submitSurvey() {
+  // 確保所有答案都已填寫
+  if (answers.includes(null) || answers.includes(undefined) || answers.length < 26) {
+    alert("請確認所有題目都已回答");
+    return;
+  }
+
+  calculateScores();
+}
+
+function calculateScores() {
+  let physiologicalScore = (
+    (6 - parseInt(answers[2], 10)) +
+    (6 - parseInt(answers[3], 10)) +
+    parseInt(answers[9], 10) +
+    parseInt(answers[14], 10) +
+    parseInt(answers[15], 10) +
+    parseInt(answers[16], 10) +
+    parseInt(answers[17], 10)
+  ) / 7 * 4 - 4;
+
+  let psychologicalScore = (
+    parseInt(answers[4], 10) +
+    parseInt(answers[5], 10) +
+    parseInt(answers[6], 10) +
+    parseInt(answers[10], 10) +
+    parseInt(answers[18], 10) +
+    (6 - parseInt(answers[25], 10))
+  ) / 6 * 4 - 4;
+
+  let socialScore = (
+    parseInt(answers[19], 10) +
+    parseInt(answers[20], 10) +
+    parseInt(answers[21], 10)
+  ) / 3 * 4 - 4;
+
+  let environmentalScore = (
+    parseInt(answers[7], 10) +
+    parseInt(answers[8], 10) +
+    parseInt(answers[11], 10) +
+    parseInt(answers[12], 10) +
+    parseInt(answers[13], 10) +
+    parseInt(answers[22], 10) +
+    parseInt(answers[23], 10) +
+    parseInt(answers[24], 10)
+  ) / 8 * 4 - 4;
+
+  // 將結果轉換為百分比
+  physiologicalScore = physiologicalScore * (100 / 16);
+  psychologicalScore = psychologicalScore * (100 / 16);
+  socialScore = socialScore * (100 / 16);
+  environmentalScore = environmentalScore * (100 / 16);
+
+  // 結果輸出或顯示
+  console.log(`Physiological Score: ${physiologicalScore.toFixed(2)}`);
+  console.log(`Psychological Score: ${psychologicalScore.toFixed(2)}`);
+  console.log(`Social Score: ${socialScore.toFixed(2)}`);
+  console.log(`Environmental Score: ${environmentalScore.toFixed(2)}`);
+
+  function displayScores(physiologicalScore, psychologicalScore, socialScore, environmentalScore) {
+    const scores = [{name: '生理', score: physiologicalScore}, {name: '心理', score: psychologicalScore}, {name: '社會', score: socialScore}, {name: '環境', score: environmentalScore}];
+    const scoresContainer = document.getElementById('scoresContainer');
+    scoresContainer.innerHTML = ''; // 清空現有的分數圓圈
+
+    scores.forEach(score => {
+      const circle = document.createElement('div');
+      circle.classList.add('score-circle');
+      // 根據分數決定顏色
+      if (score.score < 60) circle.classList.add('red');
+      else if (score.score < 70) circle.classList.add('orange');
+      else if (score.score < 80) circle.classList.add('yellow');
+      else if (score.score < 90) circle.classList.add('blue');
+      else circle.classList.add('green');
+
+      circle.innerHTML = `<div>${score.name}<br>${score.score.toFixed(2)}</div>`;
+      scoresContainer.appendChild(circle);
+    });
+  }
+
+  displayScores(physiologicalScore, psychologicalScore, socialScore, environmentalScore)
+}
+
 $(document).ready(function() {
   initSurvey();
 });
